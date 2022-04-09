@@ -30,16 +30,20 @@ public class UserApiImpl implements UserApi {
 
     @Override
     public ResponseEntity<List<UserOutputVo>> getAllUser() {
-        log.info("Get all users");
+        try {
+            log.info("Get all users");
 
-        List<User> users = allUserQuery.execute();
+            List<User> users = allUserQuery.execute();
 
-        log.info("Users {}", users.size());
+            log.info("Users {}", users.size());
 
-        return ResponseEntity.ok(
-            users.stream()
-                .map(userMapper::map)
-                .collect(Collectors.toList())
-        );
+            return ResponseEntity.ok(
+                users.stream()
+                    .map(userMapper::map)
+                    .collect(Collectors.toList())
+            );
+        } catch (Exception exce) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }
