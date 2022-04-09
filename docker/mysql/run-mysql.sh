@@ -7,6 +7,8 @@ DATABASE=${3:-christophe}
 PW=pw1234
 USER_DB=christophe
 
+SCRIPT_DIR=$(dirname "$0")
+
 DB_USER_PW="-u\"${USER_DB}\" -p\"${PW}\""
 
 docker ps -aq -f "name=${NAME}" | while read l; do docker rm -f "${l}"; echo "stopping ${l} - ${1}"; done
@@ -26,4 +28,6 @@ while ! docker exec -i "${NAME}" sh -c "exec mysql ${DB_USER_PW} -e '\q';" ; do
   sleep 3s;
 done
 
-docker exec -i "${NAME}" sh -c "exec mysql ${DB_USER_PW} ${DATABASE}" < ./"${NAME}-${DATABASE}".sql
+sleep 3s;
+
+docker exec -i "${NAME}" sh -c "exec mysql ${DB_USER_PW} ${DATABASE}" < "${SCRIPT_DIR}/${NAME}-${DATABASE}".sql

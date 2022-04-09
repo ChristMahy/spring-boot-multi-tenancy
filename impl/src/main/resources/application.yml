@@ -1,0 +1,26 @@
+#spring.jpa.hibernate.ddl-auto=validate
+#spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+#spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
+spring:
+  sql:
+    init:
+      mode: never              # Prevent JPA from trying to Initialize
+  jpa:
+    open-in-view: false        # Get Rid of OIV Warning
+    show-sql: true
+    database: mysql            # Do not Auto-Detect the Database
+    hibernate:
+      ddl-auto: none   		   # Prevent Hibernate from Automatic Changes to the DDL Schema
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+tenants:
+  datasources:
+    ds1:
+      jdbcUrl: jdbc:mysql://localhost:4321/christophe
+      username: christophe
+      password: pw1234
+    ds2:
+      jdbcUrl: jdbc:mysql://localhost:4322/christophe
+      username: christophe
+      password: pw1234

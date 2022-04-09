@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
 
-sh stop-mysql.sh ds1
-sh stop-mysql.sh ds2
+SCRIPT_DIR=$(dirname "$0")
+
+sh "${SCRIPT_DIR}"/stop-mysql.sh ds1
+sh "${SCRIPT_DIR}"/stop-mysql.sh ds2
