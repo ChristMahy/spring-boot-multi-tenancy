@@ -11,7 +11,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static be.cmahy.multitenantmysqlimpl.helper.GeneratorRandomValue.generateString;
 import static be.cmahy.multitenantmysqlimpl.helper.GeneratorRandomValue.randomLong;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserMapperOutputVoTest {
