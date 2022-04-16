@@ -1,0 +1,59 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: User API
+  description: User API paths
+paths:
+  /user:
+    get:
+      security:
+        - BasicAuth: []
+      description: Return a list of users
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserOutputVo'
+        401:
+          $ref: '#/components/responses/Unauthenticated'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        5XX:
+          $ref: '#/components/responses/UnexpectedError'
+
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: Basic
+  responses:
+    Unauthenticated:
+      description: Not authenticated
+    Forbidden:
+      description: No required access
+    UnexpectedError:
+      description: Unexpected error
+#      content:
+#        application/json:
+#          schema:
+#            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      properties:
+        message:
+          type: string
+        datetime:
+          type: string
+    UserOutputVo:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+      required:
+        - id
+        - name
