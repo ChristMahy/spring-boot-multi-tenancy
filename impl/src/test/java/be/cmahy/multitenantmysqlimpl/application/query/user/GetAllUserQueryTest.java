@@ -1,6 +1,8 @@
 package be.cmahy.multitenantmysqlimpl.application.query.user;
 
+import be.cmahy.multitenantmysqlimpl.application.mapper.UserOutputAppVoMapper;
 import be.cmahy.multitenantmysqlimpl.application.repository.UserRepository;
+import be.cmahy.multitenantmysqlimpl.application.vo.output.UserOutputAppVo;
 import be.cmahy.multitenantmysqlimpl.domain.entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,14 +16,16 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class GetAllUserQueryTest {
 
     @Mock
     private UserRepository repository;
+    @Mock
+    private UserOutputAppVoMapper mapper;
 
     @InjectMocks
     private GetAllUserQuery query;
@@ -40,8 +44,13 @@ class GetAllUserQueryTest {
         );
 
         when(repository.findAll()).thenReturn(users);
+        users.forEach(user -> {
+            UserOutputAppVo userAppVoMocked = mock(UserOutputAppVo.class);
 
-        List<User> actual = query.execute();
+            when(mapper.map(eq(user))).thenReturn(userAppVoMocked);
+        });
+
+        List<UserOutputAppVo> actual = query.execute();
 
         assertThat(actual).isNotNull();
 
@@ -54,9 +63,11 @@ class GetAllUserQueryTest {
 
         when(repository.findAll()).thenReturn(users);
 
-        List<User> actual = query.execute();
+        List<UserOutputAppVo> actual = query.execute();
 
         assertThat(actual).isNotNull();
         assertThat(actual).isEmpty();
+
+        verifyNoInteractions(mapper);
     }
 }

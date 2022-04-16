@@ -1,9 +1,9 @@
 package be.cmahy.multitenantmysqlimpl.adapter.rest.input;
 
 import be.cmahy.multitenantmysqlapi.vo.output.UserOutputVo;
-import be.cmahy.multitenantmysqlimpl.adapter.mapper.UserMapperOutputVo;
+import be.cmahy.multitenantmysqlimpl.adapter.mapper.UserOutputVoMapper;
 import be.cmahy.multitenantmysqlimpl.application.query.user.GetAllUserQuery;
-import be.cmahy.multitenantmysqlimpl.domain.entity.User;
+import be.cmahy.multitenantmysqlimpl.application.vo.output.UserOutputAppVo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +28,7 @@ class UserApiImplTest {
     private GetAllUserQuery allUserQuery;
 
     @Mock
-    private UserMapperOutputVo userMapperOutputVo;
+    private UserOutputVoMapper userOutputVoMapper;
 
     @InjectMocks
     private UserApiImpl api;
@@ -39,15 +39,15 @@ class UserApiImplTest {
 
     @Test
     void getAllUser() {
-        List<User> users = List.of(
-            mock(User.class),
-            mock(User.class)
+        List<UserOutputAppVo> users = List.of(
+            mock(UserOutputAppVo.class),
+            mock(UserOutputAppVo.class)
         );
 
         when(allUserQuery.execute()).thenReturn(users);
 
-        for (int i = 0; i < users.size(); i++) {
-            when(userMapperOutputVo.map(users.get(i))).thenReturn(mock(UserOutputVo.class));
+        for (UserOutputAppVo user : users) {
+            when(userOutputVoMapper.map(user)).thenReturn(mock(UserOutputVo.class));
         }
 
         ResponseEntity<List<UserOutputVo>> actual = api.getAllUser();
@@ -60,12 +60,12 @@ class UserApiImplTest {
         assertThat(actual.getBody().size()).isEqualTo(users.size());
 
         verify(allUserQuery, times(1)).execute();
-        verify(userMapperOutputVo, times(users.size())).map(any());
+        verify(userOutputVoMapper, times(users.size())).map(any());
     }
 
     @Test
     void getAllUser_whenNoUser_thenReturnEmptyList() {
-        List<User> users = Collections.emptyList();
+        List<UserOutputAppVo> users = Collections.emptyList();
 
         when(allUserQuery.execute()).thenReturn(users);
 
@@ -77,7 +77,7 @@ class UserApiImplTest {
         assertThat(actual.getBody()).isNotNull();
 
         verify(allUserQuery, times(1)).execute();
-        verifyNoInteractions(userMapperOutputVo);
+        verifyNoInteractions(userOutputVoMapper);
     }
 
     @Test
@@ -95,7 +95,7 @@ class UserApiImplTest {
             assertThat(actual.getBody()).isNull();
 
             verify(allUserQuery, times(1)).execute();
-            verifyNoInteractions(userMapperOutputVo);
+            verifyNoInteractions(userOutputVoMapper);
         } catch (Exception anyExce) {
             fail("Shouldn't pass here !!!!", anyExce);
         }

@@ -2,9 +2,9 @@ package be.cmahy.multitenantmysqlimpl.adapter.rest.input;
 
 import be.cmahy.multitenantmysqlapi.UserApi;
 import be.cmahy.multitenantmysqlapi.vo.output.UserOutputVo;
-import be.cmahy.multitenantmysqlimpl.adapter.mapper.UserMapperOutputVo;
+import be.cmahy.multitenantmysqlimpl.adapter.mapper.UserOutputVoMapper;
 import be.cmahy.multitenantmysqlimpl.application.query.user.GetAllUserQuery;
-import be.cmahy.multitenantmysqlimpl.domain.entity.User;
+import be.cmahy.multitenantmysqlimpl.application.vo.output.UserOutputAppVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +18,11 @@ public class UserApiImpl implements UserApi {
     private final static Logger log = LoggerFactory.getLogger(UserApiImpl.class);
 
     private final GetAllUserQuery allUserQuery;
-    private final UserMapperOutputVo userMapper;
+    private final UserOutputVoMapper userMapper;
 
     public UserApiImpl(
         GetAllUserQuery allUserQuery,
-        UserMapperOutputVo userMapper
+        UserOutputVoMapper userMapper
     ) {
         this.allUserQuery = allUserQuery;
         this.userMapper = userMapper;
@@ -33,7 +33,7 @@ public class UserApiImpl implements UserApi {
         try {
             log.info("Get all users");
 
-            List<User> users = allUserQuery.execute();
+            List<UserOutputAppVo> users = allUserQuery.execute();
 
             log.info("Users {}", users.size());
 

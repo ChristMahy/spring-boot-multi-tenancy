@@ -1,8 +1,7 @@
 package be.cmahy.multitenantmysqlimpl.adapter.mapper;
 
 import be.cmahy.multitenantmysqlapi.vo.output.UserOutputVo;
-import be.cmahy.multitenantmysqlimpl.domain.entity.User;
-import org.junit.jupiter.api.BeforeEach;
+import be.cmahy.multitenantmysqlimpl.application.vo.output.UserOutputAppVo;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,28 +12,29 @@ import static be.cmahy.multitenantmysqlimpl.helper.GeneratorRandomValue.randomLo
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
-class UserMapperOutputVoTest {
+class UserOutputVoMapperTest {
 
     @InjectMocks
-    private UserMapperOutputVo mapper;
-
-    private User user;
-
-    @BeforeEach
-    void setUp() {
-        user = new User(
-            randomLong(),
-            generateString()
-        );
-    }
+    private UserOutputVoMapper mapper;
 
     @Test
     void map() {
+        UserOutputAppVo user = new UserOutputAppVo()
+            .setId(randomLong())
+            .setName(generateString());
+
         UserOutputVo actual = mapper.map(user);
 
         assertThat(actual).isNotNull();
 
         assertThat(actual.getId()).isEqualTo(user.getId());
         assertThat(actual.getName()).isEqualTo(user.getName());
+    }
+
+    @Test
+    void map_whenUserIsNull_thenReturnNull() {
+        UserOutputVo actual = mapper.map(null);
+
+        assertThat(actual).isNull();
     }
 }
